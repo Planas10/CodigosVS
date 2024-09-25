@@ -21,12 +21,21 @@
     <ClCompile Include="ConsoleControl.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Stats.h">
+    <ClInclude Include="FuncManager.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleControl.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="includes.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
   </ItemGroup>

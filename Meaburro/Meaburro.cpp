@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Stats.h"
+#include "FuncManager.h"
 
 using namespace std;
 
@@ -185,24 +185,6 @@ void TresEnRaya() {
 	}
 }
 
-
-//Combate
-void StartStats() {
-	player.max_hp = player.base_max_hp;
-	player.cur_hp = player.max_hp;
-
-	enemy.max_hp = enemy.base_max_hp;
-	enemy.cur_hp = enemy.max_hp;
-}
-
-void MainGame() {
-	StartStats();
-	StartMessage();
-	Pstats();
-
-}
-
-
 void ejercicioNota() {
 	int x;
 
@@ -290,8 +272,24 @@ void ejercicioComparacionNumeros() {
 }
 
 
+//Combate
+void StartStats() {
+	player.max_hp = player.base_max_hp;
+	player.cur_hp = player.max_hp;
+
+	enemy.max_hp = enemy.base_max_hp;
+	enemy.cur_hp = enemy.max_hp;
+}
+
+void MainGame() {
+	StartStats();
+	StartMessage();
+	HowToPlay();
+	Battle();
+
+}
 
 int main()
 {
-	//MainGame();
+	MainGame();
 }

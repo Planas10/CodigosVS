@@ -129,10 +129,13 @@
   <ItemGroup>
     <ClCompile Include="ConsoleControl.cpp" />
     <ClCompile Include="Meaburro.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleControl.h" />
-    <ClInclude Include="Stats.h" />
+    <ClInclude Include="FuncManager.h" />
+    <ClInclude Include="includes.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
