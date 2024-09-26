@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include "FuncManager.h"
 
 using namespace std;
@@ -276,9 +277,149 @@ void ejercicioComparacionNumeros() {
 void StartStats() {
 	player.max_hp = player.base_max_hp;
 	player.cur_hp = player.max_hp;
+	player.no_crit_atk_dmg = player.atk_dmg;
 
 	enemy.max_hp = enemy.base_max_hp;
 	enemy.cur_hp = enemy.max_hp;
+}
+
+void PlayerTurn(bool turn) {
+	while (!turn)
+	{
+		getline(cin, action);
+		vector<string> split_combat_move = splitString(action, ' ');
+		if (split_combat_move.size() > 0)
+		{
+			if (split_combat_move.size() == 1)
+			{
+				if (split_combat_move[0] == "help")
+				{
+					ShowHelp();
+				}
+				if (split_combat_move[0] == "stats")
+				{
+					Pstats();
+				}
+				if (split_combat_move[0] == "atack")
+				{
+					//enemy dodge
+					int eDodgeChance = rand() % 10 + 1;
+					if (eDodgeChance == 4)
+					{
+						cout << "lmao, you got dodged, skill issue" << endl;
+						turn = true;
+					}
+					else
+					{
+						//player crit
+						int pCritChance = rand() % 5 + 1;
+						if (pCritChance == 3)
+						{
+							cout << "Crit!! ";
+							player.atk_dmg *= player.crit_dmg_mult;
+						}
+						enemy.cur_hp -= player.atk_dmg;
+						cout << "Enemy loses " << player.atk_dmg << "Hp" << endl;
+						player.atk_dmg = player.no_crit_atk_dmg;
+						turn = true;
+					}
+				}
+				if (split_combat_move[0] == "potion")
+				{
+					//Healing
+					if (player.life_potions > 0)
+					{
+						if (player.cur_hp == player.max_hp)
+						{
+							cout << "Hp at max, can't use a potion" << endl;
+						}
+						else
+						{
+							player.cur_hp += player.potion_heal;
+							if (player.cur_hp > player.max_hp)
+							{
+								cout << "You recovered " << player.cur_hp - player.max_hp << "Hp" << endl;
+								player.cur_hp = player.max_hp;
+							}
+							else
+							{
+								cout << "You recovered " << player.potion_heal<< "Hp" << endl;
+							}
+							turn = true;
+						}
+					}
+					else
+					{
+						cout << "Not enough potions" << endl;
+					}
+				}
+			}
+			else
+			{
+				cout << "wrong option" << endl;
+			}
+		}
+	}
+}
+
+void EnemyTurn(bool turn) {
+	//enemy dodge
+	cout << endl;
+	int pDodgeChance = rand() % 5 + 1;
+	if (pDodgeChance == 4)
+	{
+		cout << "Dodged lmao" << endl;
+		!turn;
+	}
+	else
+	{
+		//player crit
+		int eCritChance = rand() % 5 + 1;
+		if (eCritChance == 3)
+		{
+			cout << "Crit!! ";
+			enemy.atk_dmg *= enemy.crit_dmg_mult;
+		}
+		player.cur_hp -= enemy.atk_dmg;
+		cout << "You lose " << enemy.atk_dmg << "Hp" << endl;
+		!turn;
+	}
+}
+
+//Battle func
+void Battle() {
+	bool turn_finish = false;
+	bool GameOver = false;
+	bool win = false;
+	while (GameOver == false)
+	{
+		ShowInGameStats();
+		//Player turn
+		PlayerTurn(turn_finish);
+		if (player.cur_hp <= 0)
+		{
+			win = false;
+			GameOver = true;
+		}
+		if (enemy.cur_hp <= 0)
+		{
+			win = true;
+			GameOver = true;
+		}
+		if (GameOver){break;}
+		//Enemy turn
+		EnemyTurn(turn_finish);
+		system("pause");
+		system("cls");
+	}
+	if (win)
+	{
+		cout << "Victory" << endl;
+	}
+	else
+	{
+		cout << "Lmao skill issue you lose" << endl;
+	}
 }
 
 void MainGame() {

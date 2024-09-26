@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <random>
 #include "ConsoleControl.h"
 #include "Utils.h"
 
@@ -13,11 +12,13 @@ struct Player
 	int base_max_hp = 100;
 	int max_hp;
 	int cur_hp;
-	float atk_dmg;
-	int dodge_chance = 15;
+	int atk_dmg = 10;
+	int no_crit_atk_dmg;
+	int dodge_chance = 20;
 	int crit_rate = 20;
-	float crit_dmg_mult = 1.5f;
+	int crit_dmg_mult = 2;
 	int life_potions = 3;
+	int potion_heal = 50;
 	int floors_completed = 0;
 };
 struct Enemy
@@ -27,10 +28,10 @@ struct Enemy
 	int base_max_hp = 100;
 	int max_hp;
 	int cur_hp = 100;
-	float atk_dmg = 20;
-	int dodge_chance = 15;
-	int crit_rate = 20;
-	int crit_dmg_mult = 1.5;
+	int atk_dmg = 20;
+	//dodge_chance 10%
+	//crit_rate 20%
+	int crit_dmg_mult = 2;
 	int str_mult = 1;
 };
 
@@ -60,8 +61,8 @@ void Pstats() {
 	cout << "HP: " << player.cur_hp << endl;
 	cout << "Atack dmg: " << player.atk_dmg << endl;
 	cout << "Dodge chance: " << player.dodge_chance << endl;
-	cout << "Crit rate: " << player.crit_rate << endl;
-	cout << "Crit mult: " << player.crit_dmg_mult << endl;
+	cout << "Crit rate: " << player.crit_rate << "%" << endl;
+	cout << "x" << "Crit mult: " << player.crit_dmg_mult << endl;
 	cout << "life potions: " << player.life_potions << endl;
 }
 
@@ -91,71 +92,18 @@ void ShowHelp() {
 	cout << "[Potion] -> Use a potion to restore 50hp" << endl;
 }
 
-//Battle func
-void Battle() {
-	bool turn_finish;
-	bool GameOver = false;
-	while (GameOver == false)
-	{
-		cout << "current floor: " << player.floors_completed << endl;
-		cout << "Player:" << endl;
-		cout << "---------------" << endl;
-		cout << "HP: " << player.cur_hp << endl;
-		cout << "atk dmg: " << player.atk_dmg << endl;
-		cout << "potions left: " << player.life_potions << endl;
-		getline(cin, action);
-		vector<string> split_combat_move = splitString(action, ' ');
-		if (split_combat_move.size() > 0)
-		{
-			if (split_combat_move.size() == 1)
-			{
-				if (split_combat_move[0] == "help")
-				{
-					ShowHelp();
-				}
-				if (split_combat_move[0] == "stats")
-				{
-
-				}
-				if (split_combat_move[0] == "atack")
-				{
-
-				}
-				if (split_combat_move[0] == "potion")
-				{
-					//Healing
-					if (player.life_potions > 0)
-					{
-						if (player.cur_hp == player.max_hp)
-						{
-							cout << "Hp at max, can't use a potion" << endl;
-						}
-						else
-						{
-							player.cur_hp += 50;
-							if (player.cur_hp > player.max_hp)
-							{
-								player.cur_hp = player.max_hp;
-							}
-						}
-					}
-					else
-					{
-						cout << "Not enough potions" << endl;
-					}
-				}
-			}
-			else
-			{
-				cout << "wrong option" << endl;
-			}
-		}
-		system("pause");
-		system("cls");
-	}
-
+void ShowInGameStats() {
+	cout << "current floor: " << player.floors_completed << endl;
+	cout << "Player:" << endl;
+	cout << "- - - - - -" << endl;
+	cout << "HP: " << player.cur_hp << endl;
+	cout << "atk dmg: " << player.atk_dmg << endl;
+	cout << "potions left: " << player.life_potions << endl;
+	cout << "--------------" << endl;
+	cout << "Enemy:" << endl;
+	cout << "- - - - - -" << endl;
+	cout << "HP: " << enemy.cur_hp << endl;
+	cout << "atk dmg: " << enemy.atk_dmg << endl;
 }
-
-//Potions func
 
 //Game Over func
