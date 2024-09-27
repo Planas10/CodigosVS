@@ -281,9 +281,11 @@ void StartStats() {
 
 	enemy.max_hp = enemy.base_max_hp;
 	enemy.cur_hp = enemy.max_hp;
+	enemy.no_crit_atk_dmg = enemy.atk_dmg;
 }
 
 void PlayerTurn(bool turn) {
+	bool invalidAction = false;
 	while (!turn)
 	{
 		getline(cin, action);
@@ -300,26 +302,26 @@ void PlayerTurn(bool turn) {
 				{
 					Pstats();
 				}
-				if (split_combat_move[0] == "atack")
+				if (split_combat_move[0] == "attack")
 				{
 					//enemy dodge
-					int eDodgeChance = rand() % 10 + 1;
-					if (eDodgeChance == 4)
+					int eDodgeChance = rand() % 5 + 1;
+					if (eDodgeChance == 1)
 					{
-						cout << "lmao, you got dodged, skill issue" << endl;
+						cout << endl << "lmao, you got dodged, skill issue" << endl;
 						turn = true;
 					}
 					else
 					{
 						//player crit
 						int pCritChance = rand() % 5 + 1;
-						if (pCritChance == 3)
+						if (pCritChance == 1)
 						{
 							cout << "Crit!! ";
 							player.atk_dmg *= player.crit_dmg_mult;
 						}
 						enemy.cur_hp -= player.atk_dmg;
-						cout << "Enemy loses " << player.atk_dmg << "Hp" << endl;
+						cout << endl << "Enemy loses " << player.atk_dmg << "Hp" << endl;
 						player.atk_dmg = player.no_crit_atk_dmg;
 						turn = true;
 					}
@@ -331,33 +333,44 @@ void PlayerTurn(bool turn) {
 					{
 						if (player.cur_hp == player.max_hp)
 						{
-							cout << "Hp at max, can't use a potion" << endl;
+							cout << endl << "Hp at max, can't use a potion" << endl;
+							invalidAction = true;
 						}
 						else
 						{
 							player.cur_hp += player.potion_heal;
 							if (player.cur_hp > player.max_hp)
 							{
-								cout << "You recovered " << player.cur_hp - player.max_hp << "Hp" << endl;
+								cout << endl << "You recovered " << player.cur_hp - player.max_hp << "Hp" << endl;
 								player.cur_hp = player.max_hp;
 							}
 							else
 							{
-								cout << "You recovered " << player.potion_heal<< "Hp" << endl;
+								cout << endl << "You recovered " << player.potion_heal<< "Hp" << endl;
 							}
 							turn = true;
+							player.life_potions--;
 						}
 					}
 					else
 					{
-						cout << "Not enough potions" << endl;
+						cout << "Not enough potions" << endl << endl;
+						invalidAction = true;
 					}
 				}
 			}
 			else
 			{
-				cout << "wrong option" << endl;
+				cout << "wrong option" << endl << endl;
+				invalidAction = true;
 			}
+		}
+		if (invalidAction)
+		{
+			system("pause");
+			system("cls");
+			ShowInGameStats();
+			invalidAction = false;
 		}
 	}
 }
@@ -366,22 +379,23 @@ void EnemyTurn(bool turn) {
 	//enemy dodge
 	cout << endl;
 	int pDodgeChance = rand() % 5 + 1;
-	if (pDodgeChance == 4)
+	if (pDodgeChance == 1)
 	{
-		cout << "Dodged lmao" << endl;
+		cout << "Dodged lmao" << endl << endl;
 		!turn;
 	}
 	else
 	{
 		//player crit
 		int eCritChance = rand() % 5 + 1;
-		if (eCritChance == 3)
+		if (eCritChance == 2)
 		{
 			cout << "Crit!! ";
 			enemy.atk_dmg *= enemy.crit_dmg_mult;
 		}
 		player.cur_hp -= enemy.atk_dmg;
-		cout << "You lose " << enemy.atk_dmg << "Hp" << endl;
+		cout << "You lose " << enemy.atk_dmg << "Hp" << endl << endl;
+		enemy.atk_dmg = enemy.no_crit_atk_dmg;
 		!turn;
 	}
 }
@@ -396,12 +410,7 @@ void Battle() {
 		ShowInGameStats();
 		//Player turn
 		PlayerTurn(turn_finish);
-		if (player.cur_hp <= 0)
-		{
-			win = false;
-			GameOver = true;
-		}
-		if (enemy.cur_hp <= 0)
+		if (enemy.cur_hp < 0 || enemy.cur_hp == 0)
 		{
 			win = true;
 			GameOver = true;
@@ -409,6 +418,12 @@ void Battle() {
 		if (GameOver){break;}
 		//Enemy turn
 		EnemyTurn(turn_finish);
+		if (player.cur_hp < 0 || player.cur_hp == 0)
+		{
+			win = false;
+			GameOver = true;
+		}
+		if (GameOver) { break; }
 		system("pause");
 		system("cls");
 	}

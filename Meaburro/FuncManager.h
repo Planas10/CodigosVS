@@ -14,8 +14,8 @@ struct Player
 	int cur_hp;
 	int atk_dmg = 10;
 	int no_crit_atk_dmg;
-	int dodge_chance = 20;
-	int crit_rate = 20;
+	int dodge_chance = 10;
+	int crit_rate = 10;
 	int crit_dmg_mult = 2;
 	int life_potions = 3;
 	int potion_heal = 50;
@@ -28,9 +28,10 @@ struct Enemy
 	int base_max_hp = 100;
 	int max_hp;
 	int cur_hp = 100;
-	int atk_dmg = 20;
+	int atk_dmg = 10;
+	int no_crit_atk_dmg;
 	//dodge_chance 10%
-	//crit_rate 20%
+	//crit_rate 10%
 	int crit_dmg_mult = 2;
 	int str_mult = 1;
 };
@@ -99,11 +100,18 @@ void ShowInGameStats() {
 	cout << "HP: " << player.cur_hp << endl;
 	cout << "atk dmg: " << player.atk_dmg << endl;
 	cout << "potions left: " << player.life_potions << endl;
-	cout << "--------------" << endl;
+	cout << "---------------------------------" << endl;
+	ConsoleXY(20, 1);
 	cout << "Enemy:" << endl;
+	ConsoleXY(20, 2);
 	cout << "- - - - - -" << endl;
+	ConsoleXY(20, 3);
 	cout << "HP: " << enemy.cur_hp << endl;
+	ConsoleXY(20, 4);
 	cout << "atk dmg: " << enemy.atk_dmg << endl;
+	ConsoleXY(0, 7);
+	cout << "actions: [help][stats][attack][potion]" << endl << endl;
+	cout << "What will you do: ";
 }
 
 //Game Over func
