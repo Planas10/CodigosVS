@@ -273,16 +273,7 @@ void ejercicioComparacionNumeros() {
 }
 
 
-//Combate
-void StartStats() {
-	player.max_hp = player.base_max_hp;
-	player.cur_hp = player.max_hp;
-	player.no_crit_atk_dmg = player.atk_dmg;
-
-	enemy.max_hp = enemy.base_max_hp;
-	enemy.cur_hp = enemy.max_hp;
-	enemy.no_crit_atk_dmg = enemy.atk_dmg;
-}
+//Infinite Dungeon
 
 void PlayerTurn(bool turn) {
 	bool invalidAction = false;
@@ -402,30 +393,33 @@ void EnemyTurn(bool turn) {
 
 //Battle func
 void Battle() {
+	StartStats();
 	bool turn_finish = false;
 	bool GameOver = false;
 	bool win = false;
 	while (GameOver == false)
 	{
-		ShowInGameStats();
-		//Player turn
-		PlayerTurn(turn_finish);
-		if (enemy.cur_hp < 0 || enemy.cur_hp == 0)
+		bool enemydefeated = false;
+		while (enemydefeated == false)
 		{
-			win = true;
-			GameOver = true;
+			ShowInGameStats();
+			//Player turn
+			PlayerTurn(turn_finish);
+			if (enemy.cur_hp < 0 || enemy.cur_hp == 0) { enemydefeated = true; }
+			if (enemydefeated) { 
+				NextEnemy(); break;
+			}
+			//Enemy turn
+			EnemyTurn(turn_finish);
+			if (player.cur_hp < 0 || player.cur_hp == 0)
+			{
+				win = false;
+				GameOver = true;
+			}
+			if (GameOver) { break; }
+			system("pause");
+			system("cls");
 		}
-		if (GameOver){break;}
-		//Enemy turn
-		EnemyTurn(turn_finish);
-		if (player.cur_hp < 0 || player.cur_hp == 0)
-		{
-			win = false;
-			GameOver = true;
-		}
-		if (GameOver) { break; }
-		system("pause");
-		system("cls");
 	}
 	if (win)
 	{
@@ -438,11 +432,9 @@ void Battle() {
 }
 
 void MainGame() {
-	StartStats();
 	StartMessage();
 	HowToPlay();
 	Battle();
-
 }
 
 int main()

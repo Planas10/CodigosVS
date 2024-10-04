@@ -23,8 +23,9 @@ struct Player
 };
 struct Enemy
 {
-	//enemy hp
-	string name = "Great orc";
+	//enum enemytypes {ORC, TROLL, GREAT_ORC, DEMON};
+	const string names[5] = {"Orc", "Great Orc", "Troll", "Demon", "Great Demon"};
+	string name;
 	int base_max_hp = 100;
 	int max_hp;
 	int cur_hp = 100;
@@ -41,6 +42,16 @@ Enemy enemy;
 
 string action = "";
 
+void StartStats() {
+	player.max_hp = player.base_max_hp;
+	player.cur_hp = player.max_hp;
+	player.no_crit_atk_dmg = player.atk_dmg;
+
+	enemy.max_hp = enemy.base_max_hp;
+	enemy.cur_hp = enemy.max_hp;
+	enemy.no_crit_atk_dmg = enemy.atk_dmg;
+	enemy.name = enemy.names[rand() % 5];
+}
 
 void StartMessage() {
 	system("cls");
@@ -94,6 +105,7 @@ void ShowHelp() {
 }
 
 void ShowInGameStats() {
+	system("cls");
 	cout << "current floor: " << player.floors_completed << endl;
 	cout << "Player:" << endl;
 	cout << "- - - - - -" << endl;
@@ -114,4 +126,10 @@ void ShowInGameStats() {
 	cout << "What will you do: ";
 }
 
-//Game Over func
+void NextEnemy() {
+	enemy.str_mult++;
+	enemy.max_hp = enemy.base_max_hp * enemy.str_mult;
+	enemy.cur_hp = enemy.max_hp;
+	enemy.no_crit_atk_dmg = enemy.atk_dmg * enemy.str_mult;
+	enemy.name = enemy.names[rand() % 5];
+}
