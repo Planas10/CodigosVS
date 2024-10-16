@@ -4,57 +4,57 @@
 
 using namespace std;
 
-//3N+1
-float n;
-float m;
-div_t a;
-
-void CheckParOdd() {
-	a = div(n, 2);
-}
-void cosa1() {
-	cout << "Dame un numero: ";
-	cin >> n;
-	while (n > 1)
-	{
-		CheckParOdd();
-		if (a.rem == 0)
-		{
-			n = n / 2;
-		}
-		else
-		{
-			n = 3 * n + 1;
-		}
-		cout << n << endl;
-	}
-}
-
-//3N+1 automatico
-void cosa2() {
-	n = 1;
-	m = n;
-	for (size_t i = 0; i < 100; i++)
-	{
-		cout << n << endl;
-		while (n > 1)
-		{
-			CheckParOdd();
-			if (a.rem == 0)
-			{
-				n = n / 2;
-			}
-			else
-			{
-				n = 3 * n + 1;
-			}
-			cout << n << endl;
-		}
-		m = m + 1;
-		n = m;
-		system("pause");
-	}
-}
+////3N+1
+//float n;
+//float m;
+//div_t a;
+//
+//void CheckParOdd() {
+//	a = div(n, 2);
+//}
+//void cosa1() {
+//	cout << "Dame un numero: ";
+//	cin >> n;
+//	while (n > 1)
+//	{
+//		CheckParOdd();
+//		if (a.rem == 0)
+//		{
+//			n = n / 2;
+//		}
+//		else
+//		{
+//			n = 3 * n + 1;
+//		}
+//		cout << n << endl;
+//	}
+//}
+//
+////3N+1 automatico
+//void cosa2() {
+//	n = 1;
+//	m = n;
+//	for (size_t i = 0; i < 100; i++)
+//	{
+//		cout << n << endl;
+//		while (n > 1)
+//		{
+//			CheckParOdd();
+//			if (a.rem == 0)
+//			{
+//				n = n / 2;
+//			}
+//			else
+//			{
+//				n = 3 * n + 1;
+//			}
+//			cout << n << endl;
+//		}
+//		m = m + 1;
+//		n = m;
+//		system("pause");
+//	}
+//}
 
 //Tres en raya
 const int x = 3;
@@ -272,6 +272,21 @@ void ejercicioComparacionNumeros() {
 	}
 }
 
+int s;
+int m;
+int h;
+void Pruebas() {
+	cin >> s;
+	if (s >= 0)
+	{
+		m = s / 60;
+		s = fmodf(s, 60);
+		h = m / 60;
+		m = fmodf(m, 60);
+		h = fmodf(h, 24);
+		cout << h << ":" << m << ":" << s;
+	}
+}
 
 //Infinite Dungeon
 
@@ -305,7 +320,7 @@ void PlayerTurn(bool turn) {
 					else
 					{
 						//player crit
-						int pCritChance = rand() % 5 + 1;
+						int pCritChance = rand() % player.crit_rate + 1;
 						if (pCritChance == 1)
 						{
 							cout << "Crit!! ";
@@ -320,7 +335,7 @@ void PlayerTurn(bool turn) {
 				if (split_combat_move[0] == "potion")
 				{
 					//Healing
-					if (player.life_potions > 0)
+					if (player.cur_life_potions > 0)
 					{
 						if (player.cur_hp == player.max_hp)
 						{
@@ -340,7 +355,7 @@ void PlayerTurn(bool turn) {
 								cout << endl << "You recovered " << player.potion_heal<< "Hp" << endl;
 							}
 							turn = true;
-							player.life_potions--;
+							player.cur_life_potions--;
 						}
 					}
 					else
@@ -407,6 +422,8 @@ void Battle() {
 			PlayerTurn(turn_finish);
 			if (enemy.cur_hp < 0 || enemy.cur_hp == 0) { enemydefeated = true; }
 			if (enemydefeated) { 
+				player.cur_floor++;
+				BetweenFights();
 				NextEnemy(); break;
 			}
 			//Enemy turn
